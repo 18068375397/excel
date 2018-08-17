@@ -12,13 +12,15 @@ public class DealExcelDateUtil {
 
     //当前文件已经存在
     private static String excelPath = "C:/Users/asus/Desktop/deal.xlsx";
-    private static int BCellNum = 1;
-    private static int ECellNum = 2;
+    // 起始序列号所在单元格(从0开始)
+    private static int BCellNum = 5;
+    private static int ECellNum = 6;
     // 根据excel中数据取（未做智能截取）
     private static String per = "DJTR00000";
 
     public static void main(String[] args) throws Exception {
         dealExcel();
+//        System.out.println(per.split("000").toString());
     }
 
     /**
@@ -83,7 +85,10 @@ public class DealExcelDateUtil {
                                 // 插入数据的序列号
                                 String serialNumber = per + (begin + i + 1);
                                 // excel插入一行，下方内容下移一行
-                                sheet.shiftRows(rowNum + i + 1, sheet.getLastRowNum(), 1);
+                                if (rowNum + i + 1 <= sheet.getLastRowNum())
+                                {
+                                    sheet.shiftRows(rowNum + i + 1, sheet.getLastRowNum(), 1);
+                                }
                                 newRow = sheet.createRow(rowNum + i + 1);
                                 copyRow(row, newRow);
 
