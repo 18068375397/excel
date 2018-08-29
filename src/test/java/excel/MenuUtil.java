@@ -1,5 +1,6 @@
 package excel;
 
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -13,6 +14,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +23,9 @@ import java.util.List;
  * 操作Excel表格的功能类
  */
 public class MenuUtil {
+
+    private static SimpleDateFormat fmt = new SimpleDateFormat("dd.MM.yyyy"); //日期格式
+    private static DecimalFormat df = new DecimalFormat("0");  //数字格式，防止长数字成为科学计数法形式，或者int变为double形式
 
     /**
      * 读入excel文件，解析后返回
@@ -85,7 +91,12 @@ public class MenuUtil {
         } else if (CellType.BOOLEAN == ct) {
             return cell.getBooleanCellValue() + "";
         } else if (CellType.NUMERIC == ct) {
-            return cell.getNumericCellValue() + "";
+            if (HSSFDateUtil.isCellDateFormatted(cell))
+            {
+                return fmt.format(cell.getDateCellValue()) + ""; //日期型
+            }else{
+                return df.format(cell.getNumericCellValue()) + ""; //数字型
+            }
         } else if (CellType._NONE == ct) {
             return "";
         }

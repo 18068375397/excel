@@ -6,21 +6,23 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DealExcelDateUtil {
 
-    //当前文件已经存在
+    // 1、当前文件已经存在
     private static String excelPath = "C:/Users/asus/Desktop/deal.xlsx";
-    // 起始序列号所在单元格(从0开始)
+    // 2、设置为文本格式
+    // 3、起始序列号所在单元格(从0开始)
     private static int BCellNum = 5;
     private static int ECellNum = 6;
-    // 根据excel中数据取（未做智能截取）
-    private static String per = "DJTR00000";
 
     public static void main(String[] args) throws Exception {
         dealExcel();
-//        System.out.println(per.split("000").toString());
     }
 
     /**
@@ -37,19 +39,13 @@ public class DealExcelDateUtil {
             // 获得Workbook工作薄对象
             XSSFWorkbook workbook = new XSSFWorkbook(is);
             if (workbook != null) {
-                //            for (int sheetNum = 0; sheetNum < workbook.getNumberOfSheets(); sheetNum++) {
                 // 只处理第一个sheet
                 for (int sheetNum = 0; sheetNum < 1; sheetNum++) {
-                    // workbook.getSheet("菜单");
                     // 获得当前sheet工作表
                     XSSFSheet sheet = workbook.getSheetAt(sheetNum);
                     if (sheet == null) {
                         continue;
                     }
-                    // 获得当前sheet的开始行
-                    int firstRowNum = sheet.getFirstRowNum();
-                    //                // 获得当前sheet的结束行
-                    //                int lastRowNum = sheet.getLastRowNum();
                     // 循环除了第一行的所有行
                     for (int rowNum = 1; ; rowNum++) {
                         // 获得当前行
@@ -64,17 +60,19 @@ public class DealExcelDateUtil {
                         String beginNumber = MenuUtil.getCellValue(cell1);
                         // 获取结束序列号
                         String endNumber = MenuUtil.getCellValue(cell2);
-                        // 获取数量
-                        //                    String qty = "";
 
                         int begin = 0;
                         int end = 0;
 
                         // 序列号不同，需要处理数据并插入
-                        if (!beginNumber.equals(endNumber)) //   && !qty.equals("1")
+                        if (!beginNumber.equals(endNumber))
                         {
-                            begin = Integer.valueOf(beginNumber.substring(beginNumber.length() - 6));
-                            end = Integer.valueOf(endNumber.substring(endNumber.length() - 6));
+                            String serStart = getDigit(beginNumber);
+                            String serEnd = getDigit(endNumber);
+                            int length = serStart.length();
+
+                            begin = Integer.valueOf(serStart);
+                            end = Integer.valueOf(serEnd);
                             cell2.setCellValue(beginNumber);
                             System.out.println("第" + (rowNum + 1) + "行数据处理，共" + (end - begin) + "条。起始序列号为：" + beginNumber + "，结束序列号为：" + endNumber);
 
@@ -82,11 +80,12 @@ public class DealExcelDateUtil {
                             XSSFRow newRow;
 
                             for (int i = 0; i < end - begin; i++) {
-                                // 插入数据的序列号
-                                String serialNumber = per + (begin + i + 1);
+                                // 提取唯一码前缀
+                                String per = getLetter(beginNumber);
+                                String serialNumber = per + String.format("%0" + length + "d", begin + i + 1);
+
                                 // excel插入一行，下方内容下移一行
-                                if (rowNum + i + 1 <= sheet.getLastRowNum())
-                                {
+                                if (rowNum + i + 1 <= sheet.getLastRowNum()) {
                                     sheet.shiftRows(rowNum + i + 1, sheet.getLastRowNum(), 1);
                                 }
                                 newRow = sheet.createRow(rowNum + i + 1);
@@ -122,6 +121,8 @@ public class DealExcelDateUtil {
         }
     }
 
+
+
     /**
      * 复制单元格
      *
@@ -144,6 +145,7 @@ public class DealExcelDateUtil {
 
     /**
      * 保存工作薄
+     *
      * @param wb
      */
     public static void saveExcel(XSSFWorkbook wb) {
@@ -157,6 +159,32 @@ public class DealExcelDateUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    //提取字母
+    public static String getLetter(String a) {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < a.length(); i++) {
+            char c = a.charAt(i);
+
+            if ((c <= 'z' && c >= 'a') || (c <= 'Z' && c >= 'A')) {
+                sb.append(c);
+            }
+        }
+        System.out.println(sb.toString());
+        return sb.toString();
+    }
+
+    //提取数字
+    public static String getDigit(String text) {
+        String digitList = "";
+        for (int i = 0; i < text.length(); i++) {
+            int j = (int) text.charAt(i);
+            if ((j > 47 && j < 58)) {
+                digitList = digitList + (j - 48);
+            }
+        }
+        return digitList;
     }
 
 }
