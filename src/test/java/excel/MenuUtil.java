@@ -1,7 +1,6 @@
 package excel;
 
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -52,7 +51,7 @@ public class MenuUtil {
                 // 获得当前sheet的结束行
                 int lastRowNum = sheet.getLastRowNum();
                 // 循环除了第一行的所有行
-                for (int rowNum = firstRowNum ; rowNum <= lastRowNum; rowNum++) {
+                for (int rowNum = firstRowNum; rowNum <= lastRowNum; rowNum++) {
                     // 获得当前行
                     XSSFRow row = sheet.getRow(rowNum);
                     if (row == null) {
@@ -91,10 +90,9 @@ public class MenuUtil {
         } else if (CellType.BOOLEAN == ct) {
             return cell.getBooleanCellValue() + "";
         } else if (CellType.NUMERIC == ct) {
-            if (HSSFDateUtil.isCellDateFormatted(cell))
-            {
+            if (HSSFDateUtil.isCellDateFormatted(cell)) {
                 return fmt.format(cell.getDateCellValue()) + ""; //日期型
-            }else{
+            } else {
                 return df.format(cell.getNumericCellValue()) + ""; //数字型
             }
         } else if (CellType._NONE == ct) {
@@ -135,14 +133,14 @@ public class MenuUtil {
                     + s[0] + "','" + s[1] + "','" + s[3] + "','" + s[4] + "','" + s[6] + "','" + s[7] + "','" + s[8] + "','" + s[9] + "','" + s[11] + "','" + s[12] + "','" + s[13] + "','" + "0" + "','" + "MDMUD0000000" + "','" + "0" + "','" + "0" + "','" + s[0] + "','" + s[1] + "','" + "0" + "','" + "0" + "','" + s[0] + "')";
             stmt.addBatch(insertSql);
         }
-            stmt.executeBatch();
-            conn.commit();
-            stmt.close();
-            conn.close();
+        stmt.executeBatch();
+        conn.commit();
+        stmt.close();
+        conn.close();
 
-            System.out.println("---------------导入结束--------------------");
+        System.out.println("---------------导入结束--------------------");
 
-        }
+    }
 
 
 }

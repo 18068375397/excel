@@ -1,15 +1,13 @@
 package excel;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 public class PoiTest {
     //当前文件已经存在
@@ -28,7 +26,6 @@ public class PoiTest {
     }
 
 
-
     /**
      * 在已有的Excel文件中插入一行新的数据的入口方法
      */
@@ -42,6 +39,7 @@ public class PoiTest {
 
     /**
      * 找到需要插入的行数，并新建一个POI的row对象
+     *
      * @param sheet
      * @param rowIndex
      * @return
@@ -58,6 +56,7 @@ public class PoiTest {
 
     /**
      * 创建要出入的行中单元格
+     *
      * @param row
      * @return
      */
@@ -71,6 +70,7 @@ public class PoiTest {
 
     /**
      * 得到一个已有的工作薄的POI对象
+     *
      * @return
      */
     private XSSFWorkbook returnWorkBookGivenFileHandle() {

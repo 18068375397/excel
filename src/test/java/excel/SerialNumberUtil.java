@@ -1,6 +1,5 @@
 package excel;
 
-import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -16,6 +15,7 @@ import java.util.List;
 public class SerialNumberUtil {
     /**
      * 解析excel，返回序列号列表
+     *
      * @param
      * @throws IOException
      */
@@ -40,7 +40,7 @@ public class SerialNumberUtil {
                 // 获得当前sheet的结束行
                 int lastRowNum = sheet.getLastRowNum();
                 // 循环除了第一行的所有行
-                for (int rowNum = 2 ; rowNum <= lastRowNum; rowNum++) {
+                for (int rowNum = 2; rowNum <= lastRowNum; rowNum++) {
                     // 获得当前行
                     XSSFRow row = sheet.getRow(rowNum);
                     if (row == null) {
@@ -69,6 +69,7 @@ public class SerialNumberUtil {
 
     /**
      * 读取excel数据，根据serialNumber批量更新数据
+     *
      * @param args
      * @throws Exception
      */
@@ -90,12 +91,11 @@ public class SerialNumberUtil {
         System.out.println(list.size());
 
         for (String s : list) {
-            if(!s.isEmpty())
-            {
+            if (!s.isEmpty()) {
                 // 系统ID level 父类ID 名称 类型 连接地址  管理员权限	普通用户权限
-    //            String insertSql = "insert into product_inout_sn(distcode,distName,cuscode,cusName, docType,docno,docdate,docremark,itemCode,qty,uom,autoPush,factoryCode,   ind_no,reportId,report_code,report_name,productprice,totalprice,report_org_id) VALUES ('"
-    //                    + s[0] + "','" + s[1] + "','" + s[3] + "','" + s[4] + "','" + s[6] + "','" + s[7] + "','" + s[8] + "','" + s[9] + "','" + s[11] + "','" + s[12] + "','" + s[13] + "','" + "0" + "','" + "MDMUD0000000" + "','" + "0" + "','" + "0" + "','" + s[0] + "','" + s[1] + "','" + "0" + "','" + "0" + "','" + s[0] + "')";
-                String updateSql = "UPDATE product_sn SET status = '预入库',cuscode = 'MDMUD025535',cusName = '上海九州通医疗器械供应链有限公司' WHERE serialnumber = '"+ s + "';";
+                //            String insertSql = "insert into product_inout_sn(distcode,distName,cuscode,cusName, docType,docno,docdate,docremark,itemCode,qty,uom,autoPush,factoryCode,   ind_no,reportId,report_code,report_name,productprice,totalprice,report_org_id) VALUES ('"
+                //                    + s[0] + "','" + s[1] + "','" + s[3] + "','" + s[4] + "','" + s[6] + "','" + s[7] + "','" + s[8] + "','" + s[9] + "','" + s[11] + "','" + s[12] + "','" + s[13] + "','" + "0" + "','" + "MDMUD0000000" + "','" + "0" + "','" + "0" + "','" + s[0] + "','" + s[1] + "','" + "0" + "','" + "0" + "','" + s[0] + "')";
+                String updateSql = "UPDATE product_sn SET status = '预入库',cuscode = 'MDMUD025535',cusName = '上海九州通医疗器械供应链有限公司' WHERE serialnumber = '" + s + "';";
                 System.out.println(updateSql);
                 stmt.addBatch(updateSql);
             }
