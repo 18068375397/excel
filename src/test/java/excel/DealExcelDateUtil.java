@@ -61,8 +61,8 @@ public class DealExcelDateUtil {
                     String serEnd = getDigit(endNumber);
                     int length = serStart.length();
 
-                    begin = Integer.valueOf(serStart);
-                    end = Integer.valueOf(serEnd);
+                    begin = Long.valueOf(serStart);
+                    end = Long.valueOf(serEnd);
                     cell2.setCellValue(beginNumber);
                     System.out.println("第" + (rowNum + 1) + "行数据处理，共" + (end - begin) + "条。起始序列号为：" + beginNumber + "，结束序列号为：" + endNumber);
 
